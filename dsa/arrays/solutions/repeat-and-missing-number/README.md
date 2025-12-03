@@ -78,19 +78,19 @@ Space Complexity: O(1), as we are using a constant amount of space for the varia
 
 ## Better Approach
 
-### Algorithm
+### Algorithm (Better)
 
 - `Declare a hash array of size N+1 where N is the range of numbers in the array (from 1 to N). This hash array will store the frequency of each element.`
 - `Iterate through the given array and for each element encountered, update the frequency in the hash array.`
 - `Once all elements are processed, iterate through the hash array and identify the two elements: one with frequency 2 and one with frequency 0.`
 - `Return the two elements that have frequencies of 2 and 0, respectively.`
 
-### Pseudocode
+### Pseudocode (Better)
 
 - `n ← size of nums`
 - `hash ← array of size (n + 1) initialized to 0`
 
-``` sh
+```sh
 // Step 1: Count frequencies
 for each element in nums:
     hash[element] ← hash[element] + 1
@@ -109,154 +109,80 @@ return [repeating, missing]
 
 ```
 
-### Code
+### Code (Better)
 
-#### JAVA
+| Language   | Implementation |
+|-----------|----------------|
+| Java | [View Code](./better/Solution.java) |
+| C++ | [View Code](./better/Solution.cpp) |
+| Python | [View Code](./better/solution.py) |
+| JavaScript | [View Code](./better/solution.js) |
 
-```java
-class Solution {
-    // Function to find repeating and missing numbers
-    public int[] findMissingRepeatingNumbers(int[] nums) {
-        int n = nums.length; // Size of the array
-        int repeating = -1, missing = -1;
+### Complexity Analysis (Better)
 
-        // Find the repeating and missing number:
-        for (int i = 1; i <= n; i++) {
-            // Count the occurrences:
-            int cnt = 0;
-            for (int j = 0; j < n; j++) {
-                if (nums[j] == i) cnt++;
-            }
+Time Complexity: O(2*N), where N is the size of the array. This is because we are iterating through the array once to build the hash array and then iterating through the hash array to find the repeating and missing numbers.
 
-            // Check if i is repeating or missing
-            if (cnt == 2) repeating = i;
-            else if (cnt == 0) missing = i;
+Space Complexity: O(N), as we are using an additional hash array of size N+1 to store the frequency of each element.
 
-            // Stop early if both found
-            if (repeating != -1 && missing != -1)
-                break;
-        }
+## Optimal Approach
 
-        // Return {repeating, missing}
-        return new int[]{repeating, missing};
-    }
-}
-```
+### Algorithm (Optimal)
 
-#### C++
+- `First, calculate the sum of all elements in the given array, denoted as S, and the sum of natural numbers from 1 to N, denoted as Sn. The formula for Sn is (N * (N + 1)) / 2.`
+- `Now calculate S - Sn. This gives us X - Y, where X is the repeating number and Y is the missing number.`
+- `Next, calculate the sum of squares of all elements in the array, denoted as S2, and the sum of squares of the first N numbers, denoted as S2n. The formula for S2n is (N * (N + 1) * (2N + 1)) / 6.`
+- `Now calculate S2 - S2n. This gives us X2 - Y2.`
+- `From the equations S - Sn = X - Y and S2 - S2n = X2 - Y2, we can compute X + Y by the formula (S2 - S2n) / (S - Sn).`
+- `Using the values of X + Y and X - Y, we can solve for X and Y through simple addition and subtraction.`
+- `Finally, return the values of X (the repeating number) and Y (the missing number).`
 
-```cpp
-class Solution {
-public:
-    // Function to find repeating and missing numbers
-    vector<int> findMissingRepeatingNumbers(vector<int>& nums) {
-        
-        // Size of the array
-        int n = nums.size();
-        int repeating = -1, missing = -1;
+### Pseudocode (Optimal - Mathematical Approach)
 
-        // Find the repeating and missing number:
-        for (int i = 1; i <= n; i++) {
-            
-            // Count the occurrences:
-            int cnt = 0;
-            
-            for (int j = 0; j < n; j++) {
-                if (nums[j] == i) cnt++;
-            }
+- `findMissingRepeatingNumbers(nums):`
+- `n ← size of nums`
 
-            // Check if i is repeating or missing
-            if (cnt == 2) repeating = i;
-            else if (cnt == 0) missing = i;
+```sh
+// Step 1: Calculate sum and sum of squares of array
+S ← 0
+S2 ← 0
+for each element in nums:
+    S ← S + element
+    S2 ← S2 + (element × element)
 
-            /* If both repeating and missing
-            are found, break out of loop*/
-            if (repeating != -1 && missing != -1)
-                break;
-        }
-        
-        // Return {repeating, missing}
-        return {repeating, missing};
-    }
-};
-```
+// Step 2: Expected sum and sum of squares
+Sn ← (n × (n + 1)) / 2
+S2n ← (n × (n + 1) × (2n + 1)) / 6
 
-#### PYTHON
+// Step 3: Differences
+diff ← S − Sn            // X − Y
+diff2 ← S2 − S2n         // X² − Y²
 
-```py
-class Solution:
-    # Function to find repeating and missing numbers
-    def findMissingRepeatingNumbers(self, nums):
-        
-        # Size of the array
-        n = len(nums)
-        repeating, missing = -1, -1
+// Step 4: Compute X + Y
+sumXY ← diff2 / diff     // X + Y
 
-        # Find the repeating and missing number:
-        for i in range(1, n + 1):
-            # Count the occurrences:
-            cnt = nums.count(i)
+// Step 5: Solve equations
+X ← (diff + sumXY) / 2   // Repeating number
+Y ← X − diff             // Missing number
 
-            # Check if i is repeating or missing
-            if cnt == 2:
-                repeating = i
-            elif cnt == 0:
-                missing = i
-
-            """ If both repeating and missing
-            are found, break out of loop"""
-            if repeating != -1 and missing != -1:
-                break
-
-        # Return [repeating, missing]
-        return [repeating, missing]
+return [X, Y]
 
 ```
 
-### JAVASCRIPT
+### Code (Optimal)
 
-```js
-    class Solution {
-    // Function to find repeating and missing numbers
-    findMissingRepeatingNumbers(nums) {
-        
-        // Size of the array
-        let n = nums.length;
-        let repeating = -1, missing = -1;
+| Language   | Implementation |
+|-----------|----------------|
+| Java | [View Code](./optimal/Solution.java) |
+| C++ | [View Code](./optimal/Solution.cpp) |
+| Python | [View Code](./optimal/solution.py) |
+| JavaScript | [View Code](./optimal/solution.js) |
 
-        // Find the repeating and missing number:
-        for (let i = 1; i <= n; i++) {
-            
-            // Count the occurrences:
-            let cnt = 0;
-            for (let j = 0; j < n; j++) {
-                if (nums[j] === i) {
-                    cnt++;
-                }
-            }
+### Complexity Analysis (Optimal)
 
-            // Check if i is repeating or missing
-            if (cnt === 2) {
-                repeating = i;
-            } else if (cnt === 0) {
-                missing = i;
-            }
+Time Complexity: O(N), where N is the size of the array. This is because we are iterating through the array to calculate the sums and sums of squares.
 
-            /* If both repeating and missing
-            are found, break out of loop*/
-            if (repeating !== -1 && missing !== -1) {
-                break;
-            }
-        }
+Space Complexity: O(1), as we are using a constant amount of space for variables, regardless of the input size.
 
-        // Return [repeating, missing]
-        return [repeating, missing];
-    }
-}
-```
+## Video Explanation
 
-### Complexity Analysis
-
-Time Complexity: O(N2), where N is the size of the array. This is because we are iterating through the array for each integer from 1 to N, leading to a nested loop.
-
-Space Complexity: O(1), as we are using a constant amount of space for the variables `repeating` and `missing`, regardless of the input size.
+<a href="https://www.youtube.com/watch?v=2D0D8HE6uak&feature=youtu.be" target="_blank">Repeat and Missing Number - Click here</a>

@@ -8,7 +8,7 @@ class Solution {
     findMissingRepeatingNumbers(nums) {
         
         // Size of the array
-        let n = nums.length; 
+        let n = nums.length;
         let repeating = -1, missing = -1;
 
         // Find the repeating and missing number:
