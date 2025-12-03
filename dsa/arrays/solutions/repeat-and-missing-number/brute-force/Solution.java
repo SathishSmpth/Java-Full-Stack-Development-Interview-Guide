@@ -1,3 +1,13 @@
+/*
+ * Problem: Repeat and Missing Number
+ * Documentation:
+ * BACK → ../README.md
+ *
+ * GitHub:
+ * Click the path above to navigate back to the explanation.
+ */
+
+
 public class Solution {
     // Function to find repeating and missing numbers
     public int[] findMissingRepeatingNumbers(int[] nums) {
